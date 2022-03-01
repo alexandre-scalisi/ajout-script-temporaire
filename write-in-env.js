@@ -5,7 +5,7 @@ const crypto = require("crypto");
 
 const fs = require("fs");
 if (!fs.existsSync(".env")) {
-  fs.writeFileSync(".env", "utf8", (err) => {
+  fs.writeFileSync(".env", "", (err) => {
     if (err) console.log(err);
   });
 }

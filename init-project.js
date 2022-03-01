@@ -15,7 +15,6 @@ const connection = mysql.createConnection({
   port: +port,
 });
 
-console.log(process.env.DATABASE_NAME);
 connection.connect(function (err) {
   connection.query(
     `CREATE DATABASE IF NOT EXISTS ${database}`,
