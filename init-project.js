@@ -17,7 +17,7 @@ const connection = mysql.createConnection({
 
 connection.connect(function (err) {
   connection.query(
-    `CREATE DATABASE IF NOT EXISTS ${database}`,
+    `CREATE DATABASE IF NOT EXISTS \`${database}\``,
     function (err, result) {
       if (err) throw err;
       console.log("Database created");
