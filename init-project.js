@@ -15,31 +15,17 @@ const connection = mysql.createConnection({
   port: +port,
 });
 
-console.log(process.env.DATABASE_NAME);
 connection.connect(function (err) {
   connection.query(
-    `CREATE DATABASE IF NOT EXISTS ${database}`,
+    `CREATE DATABASE IF NOT EXISTS ${database} CHARACTER SET utf8 COLLATE utf8_general_ci;`,
     function (err, result) {
       if (err) throw err;
       console.log("Database created");
-      const importer = new Importer({ host, user, password, database });
-      // New onProgress method, added in version 5.0!
-      importer.onProgress((progress) => {
-        var percent =
-          Math.floor(
-            (progress.bytes_processed / progress.total_bytes) * 10000
-          ) / 100;
-        console.log(`${percent}% Completed`);
-      });
+      const importer = new Importer({ host, user, password, database, port });
       importer
         .import("dump.sql")
-        .then(() => {
-          var files_imported = importer.getImported();
-          console.log(`${files_imported.length} SQL file(s) imported.`);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+        .then(() => console.log("Database imported successfully"))
+        .catch((err) => console.error(err));
     }
   );
   connection.end();
