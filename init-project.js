@@ -17,7 +17,7 @@ const connection = mysql.createConnection({
 
 connection.connect(function (err) {
   connection.query(
-    `CREATE DATABASE IF NOT EXISTS ${database} CHARACTER SET utf8 COLLATE utf8_general_ci;`,
+    `CREATE DATABASE IF NOT EXISTS \`${database}\` CHARACTER SET utf8 COLLATE utf8_general_ci;`,
     function (err, result) {
       if (err) throw err;
       console.log("Database created");
