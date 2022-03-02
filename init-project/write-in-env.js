@@ -2,6 +2,7 @@ const lineReader = require("line-reader");
 const prompt = require("prompt");
 const { promisify } = require("util");
 const crypto = require("crypto");
+const promptSchema = require("./prompt-schema");
 
 const fs = require("fs");
 if (!fs.existsSync(".env")) {
@@ -45,36 +46,29 @@ env["API_TOKEN_SALT"] =
   prompt.start();
   prompt.message = "";
 
-  promisify(prompt.get)(
-    [
-      "DATABASE_NAME",
-      "DATABASE_PORT",
-      "DATABASE_PASSWORD",
-      "DATABASE_USERNAME",
-      "DATABASE_HOST",
-    ],
-    function (err, result) {
-      if (err) {
-        return onErr(err);
-      }
-      Object.entries(result).forEach(([k, v]) => {
-        if (env[k] === undefined) {
-          env[k] = v.trim();
-          return;
-        }
-
-        if (v.trim().length === 0) return;
-
-        env[k] = v.trim();
-      });
-
-      const data = Object.entries(env)
-        .map(([k, v]) => `${k}=${v}`)
-        .join("\n");
-
-      fs.writeFile(".env", data, "utf8", (err) => {
-        if (err) console.log(err);
-      });
+  prompt.get(promptSchema(env), function (err, result) {
+    if (err) {
+      return onErr(err);
     }
-  );
+
+    Object.entries(result).forEach(([k, v]) => {
+      v = v.toString();
+      if (env[k] === undefined) {
+        env[k] = v.trim();
+        return;
+      }
+
+      if (v.trim().length === 0) return;
+
+      env[k] = v.trim();
+    });
+
+    const data = Object.entries(env)
+      .map(([k, v]) => `${k}=${v}`)
+      .join("\n");
+
+    fs.writeFile(".env", data, "utf8", (err) => {
+      if (err) console.log(err);
+    });
+  });
 })();

@@ -8,7 +8,7 @@
     "start": "strapi start",
     "build": "strapi build",
     "strapi": "strapi",
-    "init": "npm install && node write-in-env.js && node init-project.js"
+    "init": "npm install && node ./init-project/write-in-env.js && node ./init-project/init-project.js"
   },
   "devDependencies": {},
   "dependencies": {
